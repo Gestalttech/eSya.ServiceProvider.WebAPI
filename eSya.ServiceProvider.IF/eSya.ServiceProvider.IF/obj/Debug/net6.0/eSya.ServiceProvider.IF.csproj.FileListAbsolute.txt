@@ -1,0 +1,15 @@
+D:\Projects\eSyaProjects2022\eSya.ServiceProvider.WebAPI\eSya.ServiceProvider.IF\eSya.ServiceProvider.IF\bin\Debug\net6.0\eSya.ServiceProvider.IF.deps.json
+D:\Projects\eSyaProjects2022\eSya.ServiceProvider.WebAPI\eSya.ServiceProvider.IF\eSya.ServiceProvider.IF\bin\Debug\net6.0\eSya.ServiceProvider.IF.dll
+D:\Projects\eSyaProjects2022\eSya.ServiceProvider.WebAPI\eSya.ServiceProvider.IF\eSya.ServiceProvider.IF\bin\Debug\net6.0\eSya.ServiceProvider.IF.pdb
+D:\Projects\eSyaProjects2022\eSya.ServiceProvider.WebAPI\eSya.ServiceProvider.IF\eSya.ServiceProvider.IF\bin\Debug\net6.0\eSya.ServiceProvider.DO.dll
+D:\Projects\eSyaProjects2022\eSya.ServiceProvider.WebAPI\eSya.ServiceProvider.IF\eSya.ServiceProvider.IF\bin\Debug\net6.0\eSya.ServiceProvider.DO.pdb
+D:\Projects\eSyaProjects2022\eSya.ServiceProvider.WebAPI\eSya.ServiceProvider.IF\eSya.ServiceProvider.IF\obj\Debug\net6.0\eSya.ServiceProvider.IF.csproj.AssemblyReference.cache
+D:\Projects\eSyaProjects2022\eSya.ServiceProvider.WebAPI\eSya.ServiceProvider.IF\eSya.ServiceProvider.IF\obj\Debug\net6.0\eSya.ServiceProvider.IF.GeneratedMSBuildEditorConfig.editorconfig
+D:\Projects\eSyaProjects2022\eSya.ServiceProvider.WebAPI\eSya.ServiceProvider.IF\eSya.ServiceProvider.IF\obj\Debug\net6.0\eSya.ServiceProvider.IF.AssemblyInfoInputs.cache
+D:\Projects\eSyaProjects2022\eSya.ServiceProvider.WebAPI\eSya.ServiceProvider.IF\eSya.ServiceProvider.IF\obj\Debug\net6.0\eSya.ServiceProvider.IF.AssemblyInfo.cs
+D:\Projects\eSyaProjects2022\eSya.ServiceProvider.WebAPI\eSya.ServiceProvider.IF\eSya.ServiceProvider.IF\obj\Debug\net6.0\eSya.ServiceProvider.IF.csproj.CoreCompileInputs.cache
+D:\Projects\eSyaProjects2022\eSya.ServiceProvider.WebAPI\eSya.ServiceProvider.IF\eSya.ServiceProvider.IF\obj\Debug\net6.0\eSya.ServiceProvider.IF.csproj.CopyComplete
+D:\Projects\eSyaProjects2022\eSya.ServiceProvider.WebAPI\eSya.ServiceProvider.IF\eSya.ServiceProvider.IF\obj\Debug\net6.0\eSya.ServiceProvider.IF.dll
+D:\Projects\eSyaProjects2022\eSya.ServiceProvider.WebAPI\eSya.ServiceProvider.IF\eSya.ServiceProvider.IF\obj\Debug\net6.0\refint\eSya.ServiceProvider.IF.dll
+D:\Projects\eSyaProjects2022\eSya.ServiceProvider.WebAPI\eSya.ServiceProvider.IF\eSya.ServiceProvider.IF\obj\Debug\net6.0\eSya.ServiceProvider.IF.pdb
+D:\Projects\eSyaProjects2022\eSya.ServiceProvider.WebAPI\eSya.ServiceProvider.IF\eSya.ServiceProvider.IF\obj\Debug\net6.0\ref\eSya.ServiceProvider.IF.dll

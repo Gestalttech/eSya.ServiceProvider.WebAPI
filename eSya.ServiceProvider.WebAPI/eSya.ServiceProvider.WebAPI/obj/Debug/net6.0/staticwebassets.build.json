@@ -1,0 +1,58 @@
+{
+  "Version": 1,
+  "Hash": "+7N05nkfB5zvWcEVlXqouGXHyEZZFHM0HHRakxvn7pg=",
+  "Source": "eSya.ServiceProvider.WebAPI",
+  "BasePath": "_content/eSya.ServiceProvider.WebAPI",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "eSya.ServiceProvider.WebAPI\\wwwroot",
+      "Source": "eSya.ServiceProvider.WebAPI",
+      "ContentRoot": "D:\\Projects\\eSyaProjects2022\\eSya.ServiceProvider.WebAPI\\eSya.ServiceProvider.WebAPI\\eSya.ServiceProvider.WebAPI\\wwwroot\\",
+      "BasePath": "_content/eSya.ServiceProvider.WebAPI",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "D:\\Projects\\eSyaProjects2022\\eSya.ServiceProvider.WebAPI\\eSya.ServiceProvider.WebAPI\\eSya.ServiceProvider.WebAPI\\wwwroot\\Resources\\ar-EG.json",
+      "SourceId": "eSya.ServiceProvider.WebAPI",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Projects\\eSyaProjects2022\\eSya.ServiceProvider.WebAPI\\eSya.ServiceProvider.WebAPI\\eSya.ServiceProvider.WebAPI\\wwwroot\\",
+      "BasePath": "_content/eSya.ServiceProvider.WebAPI",
+      "RelativePath": "Resources/ar-EG.json",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Resources\\ar-EG.json"
+    },
+    {
+      "Identity": "D:\\Projects\\eSyaProjects2022\\eSya.ServiceProvider.WebAPI\\eSya.ServiceProvider.WebAPI\\eSya.ServiceProvider.WebAPI\\wwwroot\\Resources\\en-US.json",
+      "SourceId": "eSya.ServiceProvider.WebAPI",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Projects\\eSyaProjects2022\\eSya.ServiceProvider.WebAPI\\eSya.ServiceProvider.WebAPI\\eSya.ServiceProvider.WebAPI\\wwwroot\\",
+      "BasePath": "_content/eSya.ServiceProvider.WebAPI",
+      "RelativePath": "Resources/en-US.json",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Resources\\en-US.json"
+    }
+  ]
+}

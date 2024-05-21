@@ -1,0 +1,23 @@
+{
+
+  "W0130": "Doctor Leave already Exists for the Date Range",
+  "W0131": "Doctor Leave doesn't Exist to update",
+  "W0132": "Doctor Short Name already Exist",
+  "W0133": "Doctor Registration Number already Exist",
+  "W0134": "Mobile Number is already Exist",
+  "W0135": "EMail ID is already Exist",
+  "W0136": "Doctor ID does not Exist",
+  "W0137": "Please Select Doctor Image",
+  "W0138": "Please Select Doctor Signature",
+  "W0139": "Please Enter Statutory Details",
+  "W0140": "Please Select any Business Location",
+  "W0141": "Specialty does not Exist",
+  "W0142": "New effective date can't be less than the current effective date",
+
+  "S0001": "Saved Sucessfully",
+  "S0002": "Updated Sucessfully",
+  "S0003": "Activated Successfully",
+  "S0004": "De Activated Successfully",
+  "S0005": "Deleted Sucessfully",
+  "S0006": "Doctor Image & Signature Uploaded Successfully"
+}
