@@ -16,18 +16,17 @@ namespace eSya.ServiceProvider.DO
         public int CityCode { get; set; }
         public string Zipcode { get; set; }
         public int ZipserialNumber { get; set; }
-        public string Area { get; set; }
+        public string? Area { get; set; }
         public string Address { get; set; }
-        public string Pobox { get; set; }
+        public string? Pobox { get; set; }
         public bool ActiveStatus { get; set; }
         public string FormId { get; set; }
         public int UserID { get; set; }
-        public DateTime CreatedOn { get; set; }
         public string TerminalID { get; set; }
 
-        public string StateDesc { get; set; }
-        public string CityDesc { get; set; }
-        public string ZipDesc { get; set; }
+        public string? StateDesc { get; set; }
+        public string? CityDesc { get; set; }
+        public string? ZipDesc { get; set; }
 
 
     }

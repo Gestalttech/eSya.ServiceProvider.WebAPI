@@ -12,34 +12,27 @@ namespace eSya.ServiceProvider.DO
         public int DoctorId { get; set; }
         public string DoctorName { get; set; }
         public string DoctorShortName { get; set; }
-        public string Gender { get; set; }
+        public int Gender { get; set; }
         public string DoctorRegnNo { get; set; }
-        public string EMailId { get; set; }
+        public string? EMailId { get; set; }
         public int ISDCode { get; set; }
         public string MobileNumber { get; set; }
         public int DoctorClass { get; set; }
         public int DoctorCategory { get; set; }
-        //public bool AllowConsultation { get; set; }
-        //public bool AllowSMS { get; set; }
-        public string TraiffFrom { get; set; }
-        //public int PayoutType { get; set; }
-        public string Password { get; set; }
+        public int TraiffFrom { get; set; }
+        public string? Password { get; set; }
         public int SeniorityLevel { get; set; }
         public string FormID { get; set; }
         public bool ActiveStatus { get; set; }
         public int UserID { get; set; }
         public string TerminalID { get; set; }
         //for displaying properties
-        public string DoctorClassDesc { get; set; }
-        public string DoctorCategoryDesc { get; set; }
-        //public string PayoutTypeDesc { get; set; }
-        public string SeniorityLevelDesc { get; set; }
-
-        ////for Image
-        //public byte[] Photo { get; set; }
-        //public string userimage { get; set; }
-
+        public string? DoctorClassDesc { get; set; }
+        public string? DoctorCategoryDesc { get; set; }
+        public string? SeniorityLevelDesc { get; set; }
         public List<DO_DoctorParameter> l_DoctorParameter { get; set; }
+        public string? TraiffFromDesc { get; set; }
+        public string? GenderDesc { get; set; }
 
     }
     public class DO_DoctorImage
@@ -62,7 +55,7 @@ namespace eSya.ServiceProvider.DO
         public int ParameterID { get; set; }
         public decimal ParmPerc { get; set; }
         public bool ParmAction { get; set; }
-        public string ParmDesc { get; set; }
+        public string? ParmDesc { get; set; }
         public decimal ParmValue { get; set; }
         public bool ActiveStatus { get; set; }
         public string FormId { get; set; }

@@ -9,3 +9,4 @@ D:\Projects\eSyaProjects2022\eSya.ServiceProvider.WebAPI\eSya.ServiceProvider.DO
 D:\Projects\eSyaProjects2022\eSya.ServiceProvider.WebAPI\eSya.ServiceProvider.DO\eSya.ServiceProvider.DO\obj\Debug\net6.0\refint\eSya.ServiceProvider.DO.dll
 D:\Projects\eSyaProjects2022\eSya.ServiceProvider.WebAPI\eSya.ServiceProvider.DO\eSya.ServiceProvider.DO\obj\Debug\net6.0\eSya.ServiceProvider.DO.pdb
 D:\Projects\eSyaProjects2022\eSya.ServiceProvider.WebAPI\eSya.ServiceProvider.DO\eSya.ServiceProvider.DO\obj\Debug\net6.0\ref\eSya.ServiceProvider.DO.dll
+D:\Projects\eSyaProjects2022\eSya.ServiceProvider.WebAPI\eSya.ServiceProvider.DO\eSya.ServiceProvider.DO\obj\Debug\net6.0\eSya.ServiceProvider.DO.sourcelink.json

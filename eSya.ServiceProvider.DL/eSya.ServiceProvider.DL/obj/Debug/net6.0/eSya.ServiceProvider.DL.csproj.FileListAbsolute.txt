@@ -17,3 +17,4 @@ D:\Projects\eSyaProjects2022\eSya.ServiceProvider.WebAPI\eSya.ServiceProvider.DL
 D:\Projects\eSyaProjects2022\eSya.ServiceProvider.WebAPI\eSya.ServiceProvider.DL\eSya.ServiceProvider.DL\obj\Debug\net6.0\ref\eSya.ServiceProvider.DL.dll
 D:\Projects\eSyaProjects2022\eSya.ServiceProvider.WebAPI\eSya.ServiceProvider.DL\eSya.ServiceProvider.DL\bin\Debug\net6.0\eSya.ServiceProvider.DL.runtimeconfig.json
 D:\Projects\eSyaProjects2022\eSya.ServiceProvider.WebAPI\eSya.ServiceProvider.DL\eSya.ServiceProvider.DL\obj\Debug\net6.0\eSya.ServiceProvider.DL.genruntimeconfig.cache
+D:\Projects\eSyaProjects2022\eSya.ServiceProvider.WebAPI\eSya.ServiceProvider.DL\eSya.ServiceProvider.DL\obj\Debug\net6.0\eSya.ServiceProvider.DL.sourcelink.json

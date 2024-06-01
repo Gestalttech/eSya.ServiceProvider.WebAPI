@@ -9,7 +9,7 @@ namespace eSya.ServiceProvider.DO
     public class DO_DoctorBusinessLink
     {
         public int BusinessKey { get; set; }
-        public string BusinessLocation { get; set; }
+        public string? BusinessLocation { get; set; }
         public int DoctorId { get; set; }
         public int TimeSlotInMins { get; set; }
         public int PatientCountPerHour { get; set; }

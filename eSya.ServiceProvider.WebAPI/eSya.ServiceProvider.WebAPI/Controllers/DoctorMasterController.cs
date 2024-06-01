@@ -45,17 +45,6 @@ namespace eSya.ServiceProvider.WebAPI.Controllers
         /// UI Reffered - Doctor Master,
         /// </summary>
         [HttpGet]
-        public async Task<IActionResult> GetDoctorMasterList()
-        {
-            var msg = await _doctorMasterRepository.GetDoctorMasterList();
-            return Ok(msg);
-        }
-
-        /// <summary>
-        /// Get All Doctor Master List
-        /// UI Reffered - Doctor Master,
-        /// </summary>
-        [HttpGet]
         public async Task<IActionResult> GetDoctorMasterListForPrefix(string doctorNamePrefix)
         {
             var msg = await _doctorMasterRepository.GetDoctorMasterListForPrefix(doctorNamePrefix);
@@ -103,9 +92,9 @@ namespace eSya.ServiceProvider.WebAPI.Controllers
         /// UI Reffered - Doctor Details,
         /// </summary>
         [HttpPost]
-        public async Task<IActionResult> InsertOrUpdateIntoDoctordetails(Do_DoctorDetails obj)
+        public async Task<IActionResult> InsertOrUpdateIntoAboutDoctor(Do_AboutDoctor obj)
         {
-            var msg = await _doctorMasterRepository.InsertOrUpdateIntoDoctordetails(obj);
+            var msg = await _doctorMasterRepository.InsertOrUpdateIntoAboutDoctor(obj);
             return Ok(msg);
         }
 
@@ -115,9 +104,9 @@ namespace eSya.ServiceProvider.WebAPI.Controllers
         /// UI-Param-doctorId
         /// </summary>
         [HttpGet]
-        public async Task<IActionResult> GetDoctordetailsbydoctorId(int doctorId)
+        public async Task<IActionResult> GetAboutDoctorbydoctorId(int doctorId)
         {
-            var do_details = await _doctorMasterRepository.GetDoctordetailsbydoctorId(doctorId);
+            var do_details = await _doctorMasterRepository.GetAboutDoctorbydoctorId(doctorId);
             return Ok(do_details);
         }
         #endregion 
@@ -147,6 +136,16 @@ namespace eSya.ServiceProvider.WebAPI.Controllers
         #endregion
 
         #region Doctor Profile Address
+        /// <summary>
+        /// Get Doctor Business Link Data
+        /// UI Reffered - Doctor Business Link,
+        /// </summary>
+        [HttpGet]
+        public async Task<IActionResult> GetDoctorLinkWithBusinessLocation(int doctorId)
+        {
+            var msg = await _doctorMasterRepository.GetDoctorLinkWithBusinessLocation(doctorId);
+            return Ok(msg);
+        }
         /// <summary>
         ///Get STATES bY ISD Codes 
         /// UI Reffered - Doctor Profile Address,
@@ -274,75 +273,6 @@ namespace eSya.ServiceProvider.WebAPI.Controllers
         }
         #endregion
 
-        #region Doctor Business Link need to remove after freeze
-        /// <summary>
-        /// Get Doctor Business Link Data
-        /// UI Reffered - Doctor Business Link,
-        /// </summary>
-        [HttpGet]
-        public async Task<IActionResult> GetDoctorMasterBusinessList(int businessKey)
-        {
-            var msg = await _doctorMasterRepository.GetDoctorMasterBusinessList(businessKey);
-            return Ok(msg);
-        }
-
-        /// <summary>
-        /// Insert/ Update into Doctor Business Link Table
-        /// UI Reffered - Doctor Business Link,
-        /// </summary>
-        [HttpPost]
-        public async Task<IActionResult> InsertIntoDoctorBusinessLink(List<DO_DoctorMaster> obj)
-        {
-            var msg = await _doctorMasterRepository.InsertIntoDoctorBusinessLink(obj);
-            return Ok(msg);
-        }
-
-        /// <summary>
-        /// Get Business Doctor Link Data
-        /// UI Reffered - Doctor Master,
-        /// </summary>
-        [HttpGet]
-        public async Task<IActionResult> GetBusinessLocationDoctorList(int doctorId)
-        {
-            var msg = await _doctorMasterRepository.GetBusinessLocationDoctorList(doctorId);
-            return Ok(msg);
-        }
-
-        /// <summary>
-        /// Insert/ Update into Doctor Business Link Table
-        /// UI Reffered - Doctor Master,
-        /// </summary>
-        [HttpPost]
-        public async Task<IActionResult> InsertIntoBusinessDoctorLink(List<DO_DoctorMaster> obj)
-        {
-            var msg = await _doctorMasterRepository.InsertIntoBusinessDoctorLink(obj);
-            return Ok(msg);
-        }
-
-        /// <summary>
-        /// Get Business Specialty Link Data
-        /// UI Reffered - Doctor Master,
-        /// </summary>
-        [HttpGet]
-        public async Task<IActionResult> GetDoctorBusinessKey(int doctorId)
-        {
-            var msg = await _doctorMasterRepository.GetDoctorBusinessKey(doctorId);
-            return Ok(msg);
-        }
-        /// <summary>
-        /// Get Business Keys by doctor Id for drop down
-        /// UI Reffered - Doctor Speciality,
-        /// </summary>
-        [HttpGet]
-        public async Task<IActionResult> GetDoctorLocationbyDoctorId(int doctorId)
-        {
-            var msg = await _doctorMasterRepository.GetDoctorLocationbyDoctorId(doctorId);
-            return Ok(msg);
-        }
-
-      
-        #endregion
-
         #region Doctor Profilr Business Link
         /// <summary>
         /// Get Doctor Business Link Data
@@ -366,19 +296,20 @@ namespace eSya.ServiceProvider.WebAPI.Controllers
             return Ok(msg);
         }
 
-        /// <summary>
-        /// Get Doctor Business Link Data
-        /// UI Reffered - Doctor Business Link,
-        /// </summary>
-        [HttpGet]
-        public async Task<IActionResult> GetDoctorLinkWithBusinessLocation(int doctorId)
-        {
-            var msg = await _doctorMasterRepository.GetDoctorLinkWithBusinessLocation(doctorId);
-            return Ok(msg);
-        }
+
         #endregion
 
         #region Specialty Doctor Link
+        /// <summary>
+        /// Get Specialty Business Link
+        /// UI Reffered - Doctor Master,
+        /// </summary>
+        [HttpGet]
+        public async Task<IActionResult> GetSpecialtyListForBusinessKey(int businessKey)
+        {
+            var msg = await _doctorMasterRepository.GetSpecialtyListForBusinessKey(businessKey);
+            return Ok(msg);
+        }
         /// <summary>
         /// Get Business Specialty Link Data
         /// UI Reffered - Doctor Master,
@@ -412,6 +343,10 @@ namespace eSya.ServiceProvider.WebAPI.Controllers
             return Ok(msg);
         }
 
+
+        #endregion
+
+        #region Doctor Clinic Link
         /// <summary>
         /// Get Business Specialty Link Data
         /// UI Reffered - Doctor Master,
@@ -422,9 +357,6 @@ namespace eSya.ServiceProvider.WebAPI.Controllers
             var msg = await _doctorMasterRepository.GetSpecialtyListByBKeyDoctorId(businessKey, doctorId);
             return Ok(msg);
         }
-        #endregion
-
-        #region Doctor Clinic Link
         /// <summary>
         /// Get Doctor Clinic Link Data
         /// UI Reffered - Doctor Master,
@@ -433,17 +365,6 @@ namespace eSya.ServiceProvider.WebAPI.Controllers
         public async Task<IActionResult> GetDoctorClinicLinkList(int businessKey, int specialtyId, int doctorId)
         {
             var msg = await _doctorMasterRepository.GetDoctorClinicLinkList(businessKey, specialtyId, doctorId);
-            return Ok(msg);
-        }
-
-        /// <summary>
-        /// Get Doctor Clinic Link Data by clinic & Consultation Id 
-        /// UI Reffered - Doctor Master,
-        /// </summary>
-        [HttpGet]
-        public async Task<IActionResult> GetDoctorClinicLinkListbyClinicConsultation(int businessKey, int clinicId, int consultationId)
-        {
-            var msg = await _doctorMasterRepository.GetDoctorClinicLinkListbyClinicConsultation(businessKey, clinicId, consultationId);
             return Ok(msg);
         }
 
@@ -460,27 +381,38 @@ namespace eSya.ServiceProvider.WebAPI.Controllers
         #endregion
 
         #region Doctor Profile Consultation Rates
-        /// <summary>
-        ///Get Doctor  Consultation Rates
-        /// UI Reffered - Doctor Profile Master,
-        /// </summary>
-        [HttpGet]
-        public async Task<IActionResult> GetDoctorProfileConsultationRatebyDoctorId(int businessKey, int clinictype, string currencycode, int ratetype, int doctorId)
-        {
-            var _stdetails = await _doctorMasterRepository.GetDoctorProfileConsultationRatebyDoctorId(businessKey, clinictype, currencycode, ratetype, doctorId);
-            return Ok(_stdetails);
-        }
 
-        /// <summary>
-        /// Insert Or Update into Doctor  Consultation Rates
-        /// UI Reffered - Doctor Profile Master,
-        /// </summary>
-        [HttpPost]
-        public async Task<IActionResult> AddOrUpdateDoctorProfileConsultationRate(List<DO_DoctorProfileConsultationRate> obj)
-        {
-            var msg = await _doctorMasterRepository.AddOrUpdateDoctorProfileConsultationRate(obj);
-            return Ok(msg);
-        }
+        ///// <summary>
+        ///// Get Doctor Clinic Link Data by clinic & Consultation Id 
+        ///// UI Reffered - Doctor Master,
+        ///// </summary>
+        //[HttpGet]
+        //public async Task<IActionResult> GetDoctorClinicLinkListbyClinicConsultation(int businessKey, int clinicId, int consultationId)
+        //{
+        //    var msg = await _doctorMasterRepository.GetDoctorClinicLinkListbyClinicConsultation(businessKey, clinicId, consultationId);
+        //    return Ok(msg);
+        //}
+        ///// <summary>
+        /////Get Doctor  Consultation Rates
+        ///// UI Reffered - Doctor Profile Master,
+        ///// </summary>
+        //[HttpGet]
+        //public async Task<IActionResult> GetDoctorProfileConsultationRatebyDoctorId(int businessKey, int clinictype, string currencycode, int ratetype, int doctorId)
+        //{
+        //    var _stdetails = await _doctorMasterRepository.GetDoctorProfileConsultationRatebyDoctorId(businessKey, clinictype, currencycode, ratetype, doctorId);
+        //    return Ok(_stdetails);
+        //}
+
+        ///// <summary>
+        ///// Insert Or Update into Doctor  Consultation Rates
+        ///// UI Reffered - Doctor Profile Master,
+        ///// </summary>
+        //[HttpPost]
+        //public async Task<IActionResult> AddOrUpdateDoctorProfileConsultationRate(List<DO_DoctorProfileConsultationRate> obj)
+        //{
+        //    var msg = await _doctorMasterRepository.AddOrUpdateDoctorProfileConsultationRate(obj);
+        //    return Ok(msg);
+        //}
         #endregion
 
         

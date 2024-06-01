@@ -11,7 +11,7 @@ namespace eSya.ServiceProvider.DO
         public int DoctorId { get; set; }
         public int Isdcode { get; set; }
         public int StatutoryCode { get; set; }
-        public string StatutoryDescription { get; set; }
+        public string? StatutoryDescription { get; set; }
         public decimal TaxPerc { get; set; }
         public DateTime EffectiveFrom { get; set; }
         public DateTime? EffectiveTill { get; set; }
@@ -21,7 +21,7 @@ namespace eSya.ServiceProvider.DO
         public string TerminalID { get; set; }
         public string StatutoryValue { get; set; }
     }
-    public class DO_ISDCodes
+    public class DO_CountryISDCodes
     {
         public int Isdcode { get; set; }
         public string MobileNumberPattern { get; set; }

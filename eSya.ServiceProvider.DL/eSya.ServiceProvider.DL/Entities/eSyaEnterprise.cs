@@ -860,11 +860,6 @@ namespace eSya.ServiceProvider.DL.Entities
                     .IsUnicode(false)
                     .HasColumnName("FormID");
 
-                entity.Property(e => e.Gender)
-                    .HasMaxLength(1)
-                    .IsUnicode(false)
-                    .IsFixedLength();
-
                 entity.Property(e => e.Isdcode).HasColumnName("ISDCode");
 
                 entity.Property(e => e.MobileNumber)
@@ -877,17 +872,12 @@ namespace eSya.ServiceProvider.DL.Entities
 
                 entity.Property(e => e.Password).HasMaxLength(20);
 
-                entity.Property(e => e.TraiffFrom)
-                    .HasMaxLength(1)
-                    .IsUnicode(false)
-                    .HasDefaultValueSql("('N')")
-                    .IsFixedLength();
+                entity.Property(e => e.TraiffFrom).HasDefaultValueSql("('N')");
             });
 
             modelBuilder.Entity<GtEsdocl>(entity =>
             {
-                entity.HasKey(e => new { e.BusinessKey, e.SpecialtyId, e.DoctorId, e.ClinicId })
-                    .HasName("PK_GT_ESDOCL_1");
+                entity.HasKey(e => new { e.BusinessKey, e.SpecialtyId, e.DoctorId, e.ClinicId, e.ConsultationId });
 
                 entity.ToTable("GT_ESDOCL");
 
@@ -896,6 +886,8 @@ namespace eSya.ServiceProvider.DL.Entities
                 entity.Property(e => e.DoctorId).HasColumnName("DoctorID");
 
                 entity.Property(e => e.ClinicId).HasColumnName("ClinicID");
+
+                entity.Property(e => e.ConsultationId).HasColumnName("ConsultationID");
 
                 entity.Property(e => e.CreatedOn).HasColumnType("datetime");
 

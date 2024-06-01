@@ -9,6 +9,7 @@ namespace eSya.ServiceProvider.DL.Entities
         public int SpecialtyId { get; set; }
         public int DoctorId { get; set; }
         public int ClinicId { get; set; }
+        public int ConsultationId { get; set; }
         public bool ActiveStatus { get; set; }
         public string FormId { get; set; } = null!;
         public int CreatedBy { get; set; }

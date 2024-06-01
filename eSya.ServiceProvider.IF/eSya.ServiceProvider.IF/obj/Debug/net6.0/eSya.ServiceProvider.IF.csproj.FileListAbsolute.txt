@@ -13,3 +13,4 @@ D:\Projects\eSyaProjects2022\eSya.ServiceProvider.WebAPI\eSya.ServiceProvider.IF
 D:\Projects\eSyaProjects2022\eSya.ServiceProvider.WebAPI\eSya.ServiceProvider.IF\eSya.ServiceProvider.IF\obj\Debug\net6.0\refint\eSya.ServiceProvider.IF.dll
 D:\Projects\eSyaProjects2022\eSya.ServiceProvider.WebAPI\eSya.ServiceProvider.IF\eSya.ServiceProvider.IF\obj\Debug\net6.0\eSya.ServiceProvider.IF.pdb
 D:\Projects\eSyaProjects2022\eSya.ServiceProvider.WebAPI\eSya.ServiceProvider.IF\eSya.ServiceProvider.IF\obj\Debug\net6.0\ref\eSya.ServiceProvider.IF.dll
+D:\Projects\eSyaProjects2022\eSya.ServiceProvider.WebAPI\eSya.ServiceProvider.IF\eSya.ServiceProvider.IF\obj\Debug\net6.0\eSya.ServiceProvider.IF.sourcelink.json
