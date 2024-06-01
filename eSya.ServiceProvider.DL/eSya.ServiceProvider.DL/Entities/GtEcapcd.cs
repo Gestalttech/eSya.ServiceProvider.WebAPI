@@ -19,7 +19,5 @@ namespace eSya.ServiceProvider.DL.Entities
         public int? ModifiedBy { get; set; }
         public DateTime? ModifiedOn { get; set; }
         public string? ModifiedTerminal { get; set; }
-
-        public virtual GtEcapct CodeTypeNavigation { get; set; } = null!;
     }
 }
