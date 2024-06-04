@@ -74,7 +74,7 @@ namespace eSya.ServiceProvider.DL.Repository
                             DoctorClass = obj.DoctorClass,
                             DoctorCategory = obj.DoctorCategory,
                             TraiffFrom = obj.TraiffFrom,
-                            Password = obj.Password,
+                            //Password = obj.Password,
                             SeniorityLevel = obj.SeniorityLevel,
                             ActiveStatus = obj.ActiveStatus,
                             FormId = obj.FormID,
@@ -1405,8 +1405,34 @@ namespace eSya.ServiceProvider.DL.Repository
             {
                 try
                 {
-                   
-                    var do_cl = db.GtEsopcls.Where(x=>x.BusinessKey==businessKey && x.ActiveStatus)
+
+                    // var do_cl = db.GtEsopcls.Where(x=>x.BusinessKey==businessKey && x.ActiveStatus)
+                    // .Join(db.GtEcapcds.Where(w => w.CodeType == CodeTypeValue.Clinic && w.ActiveStatus),
+                    //       l => new { l.ClinicId },
+                    //       c => new { ClinicId = c.ApplicationCode },
+                    //       (l, c) => new { l, c })
+                    //    .Join(db.GtEcapcds.Where(w => w.CodeType == CodeTypeValue.ConsultationType && w.ActiveStatus),
+                    //        lc => new { lc.l.ConsultationId },
+                    //        o => new { ConsultationId = o.ApplicationCode },
+                    //        (lc, o) => new { lc, o })
+                    //.GroupJoin(db.GtEsdocls.Where(w => w.BusinessKey == businessKey && w.SpecialtyId == specialtyId && w.DoctorId == doctorId),
+                    //          lco => new { lco.lc.l.BusinessKey, lco.lc.l.ClinicId, lco.lc.l.ConsultationId },
+                    //          d => new { d.BusinessKey, d.ClinicId, d.ConsultationId },
+                    //          (lco, d) => new { lco, d })
+                    //.SelectMany(z => z.d.DefaultIfEmpty(),
+                    // (a, b) => new DO_DoctorClinic
+                    // {
+                    //     BusinessKey = b == null ? 0 : b.BusinessKey,
+                    //     ClinicId = a.lco.lc.l.ClinicId,
+                    //     ClinicDesc = a.lco.lc.c.CodeDesc,
+                    //     ConsultationId = a.lco.lc.l.ConsultationId,
+                    //     ConsultationDesc = a.lco.o.CodeDesc,
+                    //     ActiveStatus = b == null ? false : b.ActiveStatus
+                    // }).ToList();
+                    // var Distinctclinics = do_cl .GroupBy(x => new { x.ClinicId, x.ConsultationId }).Select(g => g.First()).ToList();
+                    // return Distinctclinics.ToList();
+
+                    var do_cl = db.GtEsspcls.Where(x => x.BusinessKey == businessKey && x.SpecialtyId==specialtyId && x.ActiveStatus)
                     .Join(db.GtEcapcds.Where(w => w.CodeType == CodeTypeValue.Clinic && w.ActiveStatus),
                           l => new { l.ClinicId },
                           c => new { ClinicId = c.ApplicationCode },
@@ -1416,8 +1442,8 @@ namespace eSya.ServiceProvider.DL.Repository
                            o => new { ConsultationId = o.ApplicationCode },
                            (lc, o) => new { lc, o })
                    .GroupJoin(db.GtEsdocls.Where(w => w.BusinessKey == businessKey && w.SpecialtyId == specialtyId && w.DoctorId == doctorId),
-                             lco => new { lco.lc.l.BusinessKey, lco.lc.l.ClinicId, lco.lc.l.ConsultationId },
-                             d => new { d.BusinessKey, d.ClinicId, d.ConsultationId },
+                             lco => new { lco.lc.l.BusinessKey, lco.lc.l.ClinicId, lco.lc.l.ConsultationId, lco.lc.l.SpecialtyId },
+                             d => new { d.BusinessKey, d.ClinicId, d.ConsultationId,d.SpecialtyId },
                              (lco, d) => new { lco, d })
                    .SelectMany(z => z.d.DefaultIfEmpty(),
                     (a, b) => new DO_DoctorClinic
@@ -1429,10 +1455,9 @@ namespace eSya.ServiceProvider.DL.Repository
                         ConsultationDesc = a.lco.o.CodeDesc,
                         ActiveStatus = b == null ? false : b.ActiveStatus
                     }).ToList();
-                    var Distinctclinics = do_cl .GroupBy(x => new { x.ClinicId, x.ConsultationId }).Select(g => g.First()).ToList();
+                    var Distinctclinics = do_cl.GroupBy(x => new { x.ClinicId, x.ConsultationId }).Select(g => g.First()).ToList();
                     return Distinctclinics.ToList();
 
-                  
                 }
                 catch (Exception ex)
                 {

@@ -7,10 +7,8 @@ namespace eSya.ServiceProvider.DL.Entities
     {
         public int BusinessKey { get; set; }
         public int SpecialtyId { get; set; }
-        public string DayOfWeek { get; set; } = null!;
-        public int Op { get; set; }
-        public int Ip { get; set; }
-        public int Ot { get; set; }
+        public int ClinicId { get; set; }
+        public int ConsultationId { get; set; }
         public bool ActiveStatus { get; set; }
         public string FormId { get; set; } = null!;
         public int CreatedBy { get; set; }
