@@ -13,11 +13,15 @@
   "W0140": "Please Select any Business Location",
   "W0141": "Specialty does not Exist",
   "W0142": "New effective date can't be less than the current effective date",
+  "W0143": "Doctor Schedule doesn't Exists to update",
 
   "S0001": "Saved Sucessfully",
   "S0002": "Updated Sucessfully",
   "S0003": "Activated Successfully",
   "S0004": "De Activated Successfully",
   "S0005": "Deleted Sucessfully",
-  "S0006": "Doctor Image & Signature Uploaded Successfully"
+  "S0006": "Doctor Image & Signature Uploaded Successfully",
+  "S0007": "Doctor Schedule Updated Successfully",
+  "S0008": "Doctor Schedule Created Successfully"
+
 }

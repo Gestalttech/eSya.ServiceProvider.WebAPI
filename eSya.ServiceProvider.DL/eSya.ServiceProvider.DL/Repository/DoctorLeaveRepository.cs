@@ -27,7 +27,7 @@ namespace eSya.ServiceProvider.DL.Repository
                 {
                     try
                     {
-                        var isDoctorLeaveExist = db.GtEsdolds.Where(x => x.DoctorId == obj.DoctorId && ((x.OnLeaveFrom.Date >= obj.OnLeaveFrom.Date && x.OnLeaveFrom.Date <= obj.OnLeaveTill.Date) || (x.OnLeaveTill.Date >= obj.OnLeaveFrom.Date && x.OnLeaveTill.Date <= obj.OnLeaveTill.Date)) && x.ActiveStatus == true).Count();
+                        var isDoctorLeaveExist = db.GtEsdolds.Where(x =>x.BusinessKey==obj.BusinessKey && x.DoctorId == obj.DoctorId && ((x.OnLeaveFrom.Date >= obj.OnLeaveFrom.Date && x.OnLeaveFrom.Date <= obj.OnLeaveTill.Date) || (x.OnLeaveTill.Date >= obj.OnLeaveFrom.Date && x.OnLeaveTill.Date <= obj.OnLeaveTill.Date)) && x.ActiveStatus == true).Count();
                         if (isDoctorLeaveExist > 0)
                         {
                             return new DO_ReturnParameter() { Status = false, StatusCode = "W0130", Message = string.Format(_localizer[name: "W0130"]) };
@@ -35,10 +35,12 @@ namespace eSya.ServiceProvider.DL.Repository
 
                         var dMasterLeave = new GtEsdold
                         {
+                            BusinessKey=obj.BusinessKey,
                             DoctorId = obj.DoctorId,
                             OnLeaveFrom = obj.OnLeaveFrom.Date,
                             OnLeaveTill = obj.OnLeaveTill.Date,
                             NoOfDays = obj.NoOfDays,
+                            Comments=obj.Comments,
                             ActiveStatus = obj.ActiveStatus,
                             FormId = obj.FormID,
                             CreatedBy = obj.UserID,
@@ -74,7 +76,7 @@ namespace eSya.ServiceProvider.DL.Repository
                 {
                     try
                     {
-                        GtEsdold doctorLeave = db.GtEsdolds.Where(x => x.DoctorId == obj.DoctorId && x.OnLeaveFrom.Date == obj.OnLeaveFrom.Date).FirstOrDefault();
+                        GtEsdold doctorLeave = db.GtEsdolds.Where(x =>x.BusinessKey==obj.BusinessKey && x.DoctorId == obj.DoctorId && x.OnLeaveFrom.Date == obj.OnLeaveFrom.Date && x.OnLeaveTill==obj.OnLeaveTill).FirstOrDefault();
                         if (doctorLeave == null)
                         {
                             return new DO_ReturnParameter() { Status = false, StatusCode = "W0131", Message = string.Format(_localizer[name: "W0131"]) };
@@ -82,6 +84,7 @@ namespace eSya.ServiceProvider.DL.Repository
                         }
                         else
                         {
+                            doctorLeave.Comments = obj.Comments;
                             doctorLeave.ActiveStatus = obj.ActiveStatus;
                             doctorLeave.ModifiedBy = obj.UserID;
                             doctorLeave.ModifiedOn = System.DateTime.Now;
@@ -107,21 +110,23 @@ namespace eSya.ServiceProvider.DL.Repository
             }
         }
 
-        public async Task<List<DO_DoctorLeave>> GetDoctorLeaveListAll(int doctorId)
+        public async Task<List<DO_DoctorLeave>> GetDoctorLeaveListAll(int Businesskey,int DoctorID)
         {
             using (var db = new eSyaEnterprise())
             {
                 try
                 {
                     var dc_ms = db.GtEsdolds
-                        .Where(w => w.DoctorId == doctorId && w.OnLeaveTill >= System.DateTime.Now.Date)
+                        .Where(w => w.BusinessKey == Businesskey && w.DoctorId == DoctorID)
+                        //.Where(w =>w.BusinessKey==Businesskey && w.DoctorId == DoctorID && w.OnLeaveTill >= System.DateTime.Now.Date)
                         .AsNoTracking()
                         .Select(x => new DO_DoctorLeave
                         {
-                            DoctorId = x.DoctorId,
+
                             OnLeaveFrom = x.OnLeaveFrom,
                             OnLeaveTill = x.OnLeaveTill,
                             NoOfDays = x.NoOfDays,
+                            Comments=x.Comments,
                             ActiveStatus = x.ActiveStatus
 
                         }).OrderByDescending(x => x.OnLeaveFrom).ToListAsync();
@@ -134,31 +139,49 @@ namespace eSya.ServiceProvider.DL.Repository
                 }
             }
         }
-
-        public async Task<DO_DoctorLeave> GetDoctorLeaveData(int doctorId, DateTime leaveFromDate)
+        public async Task<DO_ReturnParameter> ActivateOrDeActivateDoctorLeave(DO_DoctorLeave obj)
         {
             using (var db = new eSyaEnterprise())
             {
-                try
+                using (var dbContext = db.Database.BeginTransaction())
                 {
-                    var dc_ms = db.GtEsdolds
-                        .Where(w => w.DoctorId == doctorId && w.OnLeaveFrom.Date == leaveFromDate.Date)
-                        .AsNoTracking()
-                        .Select(x => new DO_DoctorLeave
+                    try
+                    {
+                        GtEsdold doctorLeave = db.GtEsdolds.Where(x => x.BusinessKey == obj.BusinessKey && x.DoctorId == obj.DoctorId && x.OnLeaveFrom.Date == obj.OnLeaveFrom.Date && x.OnLeaveTill == obj.OnLeaveTill).FirstOrDefault();
+                        if (doctorLeave == null)
                         {
-                            DoctorId = x.DoctorId,
-                            OnLeaveFrom = x.OnLeaveFrom,
-                            OnLeaveTill = x.OnLeaveTill,
-                            NoOfDays = x.NoOfDays,
-                            ActiveStatus = x.ActiveStatus
+                            return new DO_ReturnParameter() { Status = false, StatusCode = "W0131", Message = string.Format(_localizer[name: "W0131"]) };
 
-                        }).FirstOrDefaultAsync();
+                        }
+                        else
+                        {
+                           
+                            doctorLeave.ActiveStatus = obj._status;
+                            doctorLeave.ModifiedBy = obj.UserID;
+                            doctorLeave.ModifiedOn = System.DateTime.Now;
+                            doctorLeave.ModifiedTerminal = obj.TerminalID;
+                            await db.SaveChangesAsync();
+                            dbContext.Commit();
+                        }
+                      
+                        if (obj._status)
+                            return new DO_ReturnParameter() { Status = true, StatusCode = "S0003", Message = string.Format(_localizer[name: "S0003"]) };
 
-                    return await dc_ms;
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
+                        else
+                            return new DO_ReturnParameter() { Status = true, StatusCode = "S0004", Message = string.Format(_localizer[name: "S0004"]) };
+
+                    }
+
+                    catch (DbUpdateException ex)
+                    {
+                        dbContext.Rollback();
+                        throw new Exception(CommonMethod.GetValidationMessageFromException(ex));
+                    }
+                    catch (Exception ex)
+                    {
+                        dbContext.Rollback();
+                        throw ex;
+                    }
                 }
             }
         }

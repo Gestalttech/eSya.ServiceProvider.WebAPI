@@ -50,6 +50,7 @@ builder.Services.AddLocalization();
 builder.Services.AddScoped<ICommonDataRepository, CommonDataRepository>();
 builder.Services.AddScoped<IDoctorLeaveRepository, DoctorLeaveRepository>();
 builder.Services.AddScoped<IDoctorMasterRepository, DoctorMasterRepository>();
+builder.Services.AddScoped<ISchedulerRepository, SchedulerRepository>();
 builder.Services.AddSingleton<IStringLocalizerFactory, JsonStringLocalizerFactory>();
 
 

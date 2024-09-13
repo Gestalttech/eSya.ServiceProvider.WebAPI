@@ -37,28 +37,28 @@ namespace eSya.ServiceProvider.WebAPI.Controllers
             var msg = await _doctorLeaveRepository.UpdateDoctorLeave(obj);
             return Ok(msg);
         }
-
+        /// <summary>
+        /// Activate Or DeActivate Doctor Leave Table
+        /// UI Reffered - Doctor Leave,
+        /// </summary>
+        [HttpPost]
+        public async Task<IActionResult> ActivateOrDeActivateDoctorLeave(DO_DoctorLeave obj)
+        {
+            var msg = await _doctorLeaveRepository.ActivateOrDeActivateDoctorLeave(obj);
+            return Ok(msg);
+        }
         /// <summary>
         /// Get All Doctor Leave List
         /// UI Reffered - Doctor Leave,
         /// </summary>
         [HttpGet]
-        public async Task<IActionResult> GetDoctorLeaveListAll(int doctorId)
+        public async Task<IActionResult> GetDoctorLeaveListAll(int Businesskey, int DoctorID)
         {
-            var msg = await _doctorLeaveRepository.GetDoctorLeaveListAll(doctorId);
+            var msg = await _doctorLeaveRepository.GetDoctorLeaveListAll(Businesskey, DoctorID);
             return Ok(msg);
         }
 
-        /// <summary>
-        /// Get All Doctor Leave List
-        /// UI Reffered - Doctor Leave,
-        /// </summary>
-        [HttpGet]
-        public async Task<IActionResult> GetDoctorLeaveData(int doctorId, DateTime leaveFromDate)
-        {
-            var msg = await _doctorLeaveRepository.GetDoctorLeaveData(doctorId, leaveFromDate.Date);
-            return Ok(msg);
-        }
+       
         #endregion
     }
 }

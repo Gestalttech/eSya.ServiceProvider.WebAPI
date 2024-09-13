@@ -5,6 +5,11 @@ namespace eSya.ServiceProvider.DL.Entities
 {
     public partial class GtEsspcd
     {
+        public GtEsspcd()
+        {
+            GtEsdos1s = new HashSet<GtEsdos1>();
+        }
+
         public int SpecialtyId { get; set; }
         public string SpecialtyDesc { get; set; } = null!;
         public string Gender { get; set; } = null!;
@@ -20,5 +25,7 @@ namespace eSya.ServiceProvider.DL.Entities
         public int? ModifiedBy { get; set; }
         public DateTime? ModifiedOn { get; set; }
         public string? ModifiedTerminal { get; set; }
+
+        public virtual ICollection<GtEsdos1> GtEsdos1s { get; set; }
     }
 }

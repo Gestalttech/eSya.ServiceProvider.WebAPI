@@ -5,6 +5,7 @@ namespace eSya.ServiceProvider.DL.Entities
 {
     public partial class GtEsdold
     {
+        public int BusinessKey { get; set; }
         public int DoctorId { get; set; }
         public DateTime OnLeaveFrom { get; set; }
         public DateTime OnLeaveTill { get; set; }

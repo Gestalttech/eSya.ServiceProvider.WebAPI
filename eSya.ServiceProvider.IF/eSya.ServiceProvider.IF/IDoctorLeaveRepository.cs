@@ -12,8 +12,8 @@ namespace eSya.ServiceProvider.IF
         #region Doctor Leave
         Task<DO_ReturnParameter> InsertIntoDoctorLeave(DO_DoctorLeave obj);
         Task<DO_ReturnParameter> UpdateDoctorLeave(DO_DoctorLeave obj);
-        Task<List<DO_DoctorLeave>> GetDoctorLeaveListAll(int doctorId);
-        Task<DO_DoctorLeave> GetDoctorLeaveData(int doctorId, DateTime leaveFromDate);
+        Task<List<DO_DoctorLeave>> GetDoctorLeaveListAll(int Businesskey, int DoctorID);
+        Task<DO_ReturnParameter> ActivateOrDeActivateDoctorLeave(DO_DoctorLeave obj);
         #endregion
     }
 }
