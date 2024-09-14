@@ -32,7 +32,7 @@ namespace eSya.ServiceProvider.DL.Repository
                         .AsNoTracking()
                         .Select(x => new DO_DoctorScheduler
                         {
-
+                            SerialNo=x.SerialNo,
                             ScheduleFromTime = x.ScheduleFromTime,
                             ScheduleToTime = x.ScheduleToTime,
                             PatientCountPerHour = x.PatientCountPerHour,
@@ -76,12 +76,7 @@ namespace eSya.ServiceProvider.DL.Repository
 
                         }
 
-                        var isDoctorScheduleExist = db.GtEsdoscs.Where(x => x.BusinessKey == obj.BusinessKey && x.ClinicId == obj.ClinicID && x.SpecialtyId == obj.SpecialtyID && x.DoctorId == obj.DoctorId && x.ConsultationId == obj.ConsultationID && x.ScheduleChangeDate.Date == obj.ScheduleChangeDate.Date).Count();
-                        if (isDoctorScheduleExist > 0)
-                        {
-                            return new DO_ReturnParameter() { Status = false, StatusCode = "W0144", Message = string.Format(_localizer[name: "W0144"]) };
-
-                        }
+                        int serialNumber = db.GtEsdoscs.Where(x => x.BusinessKey == obj.BusinessKey && x.ClinicId == obj.ClinicID && x.SpecialtyId == obj.SpecialtyID && x.DoctorId == obj.DoctorId && x.ConsultationId == obj.ConsultationID).Select(x => x.SerialNo).DefaultIfEmpty().Max() + 1;
 
                         var dMasterSchedule = new GtEsdosc
                         {
@@ -91,6 +86,7 @@ namespace eSya.ServiceProvider.DL.Repository
                             SpecialtyId = obj.SpecialtyID,
                             DoctorId = obj.DoctorId,
                             ScheduleChangeDate = obj.ScheduleChangeDate,
+                            SerialNo= serialNumber,
                             ScheduleFromTime = obj.ScheduleFromTime,
                             ScheduleToTime = obj.ScheduleToTime,
                             PatientCountPerHour=obj.PatientCountPerHour,
@@ -130,7 +126,7 @@ namespace eSya.ServiceProvider.DL.Repository
                     try
                     {
                         GtEsdosc doctorSchedule = db.GtEsdoscs.Where(x => x.BusinessKey == obj.BusinessKey && x.ClinicId == obj.ClinicID && x.SpecialtyId == obj.SpecialtyID && x.DoctorId == obj.DoctorId && x.ConsultationId == obj.ConsultationID && x.ScheduleChangeDate.Date == obj.ScheduleChangeDate.Date
-                        && x.ScheduleFromTime==obj.ScheduleFromTime && x.ScheduleToTime==obj.ScheduleToTime).FirstOrDefault();
+                        && x.SerialNo==obj.SerialNo ).FirstOrDefault();
                         if (doctorSchedule == null)
                         {
                             return new DO_ReturnParameter() { Status = false, StatusCode = "W0145", Message = string.Format(_localizer[name: "W0145"]) };
@@ -138,7 +134,27 @@ namespace eSya.ServiceProvider.DL.Repository
                         }
                         else
                         {
-                          
+                            var ds_list = db.GtEsdoscs.Where(x => x.BusinessKey == obj.BusinessKey && x.ConsultationId == obj.ConsultationID
+                                      && x.ClinicId == obj.ClinicID && x.SpecialtyId == obj.SpecialtyID && x.DoctorId == obj.DoctorId
+                                      && x.ScheduleChangeDate.Date == obj.ScheduleChangeDate.Date && x.ActiveStatus && x.SerialNo != obj.SerialNo).ToList();
+                            bool isexists = false;
+
+                            foreach (var item in ds_list)
+                            {
+                                if ((obj.ScheduleFromTime >= item.ScheduleFromTime && obj.ScheduleFromTime < item.ScheduleToTime)
+                                       || (obj.ScheduleToTime > item.ScheduleFromTime && obj.ScheduleToTime <= item.ScheduleToTime))
+                                {
+                                    isexists = true;
+                                }
+                            }
+                            if (isexists == true)
+                            {
+                                return new DO_ReturnParameter() { Status = false, StatusCode = "W0146", Message = string.Format(_localizer[name: "W0146"]) };
+
+                            }
+
+                            doctorSchedule.ScheduleFromTime = obj.ScheduleFromTime;
+                            doctorSchedule.ScheduleToTime = obj.ScheduleToTime;
                             doctorSchedule.PatientCountPerHour = obj.PatientCountPerHour;
                             doctorSchedule.TimeSlotInMins = obj.TimeSlotInMins;
                             doctorSchedule.ActiveStatus = obj.ActiveStatus;

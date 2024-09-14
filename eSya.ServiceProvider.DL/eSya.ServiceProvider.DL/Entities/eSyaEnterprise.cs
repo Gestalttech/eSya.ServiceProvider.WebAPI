@@ -682,7 +682,7 @@ namespace eSya.ServiceProvider.DL.Entities
 
             modelBuilder.Entity<GtEsdosc>(entity =>
             {
-                entity.HasKey(e => new { e.BusinessKey, e.ConsultationId, e.ClinicId, e.SpecialtyId, e.DoctorId, e.ScheduleChangeDate });
+                entity.HasKey(e => new { e.BusinessKey, e.ConsultationId, e.ClinicId, e.SpecialtyId, e.DoctorId, e.ScheduleChangeDate, e.SerialNo });
 
                 entity.ToTable("GT_ESDOSC");
 

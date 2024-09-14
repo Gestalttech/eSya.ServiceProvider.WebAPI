@@ -11,6 +11,7 @@ namespace eSya.ServiceProvider.DL.Entities
         public int SpecialtyId { get; set; }
         public int DoctorId { get; set; }
         public DateTime ScheduleChangeDate { get; set; }
+        public int SerialNo { get; set; }
         public TimeSpan ScheduleFromTime { get; set; }
         public TimeSpan ScheduleToTime { get; set; }
         public int PatientCountPerHour { get; set; }
