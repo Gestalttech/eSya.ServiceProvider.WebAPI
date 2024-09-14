@@ -8,6 +8,7 @@ namespace eSya.ServiceProvider.DL.Entities
         public GtEsspcd()
         {
             GtEsdos1s = new HashSet<GtEsdos1>();
+            GtEsdoscs = new HashSet<GtEsdosc>();
         }
 
         public int SpecialtyId { get; set; }
@@ -27,5 +28,6 @@ namespace eSya.ServiceProvider.DL.Entities
         public string? ModifiedTerminal { get; set; }
 
         public virtual ICollection<GtEsdos1> GtEsdos1s { get; set; }
+        public virtual ICollection<GtEsdosc> GtEsdoscs { get; set; }
     }
 }

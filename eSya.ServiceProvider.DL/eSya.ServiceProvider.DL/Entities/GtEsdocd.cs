@@ -9,6 +9,7 @@ namespace eSya.ServiceProvider.DL.Entities
         {
             GtEsdolds = new HashSet<GtEsdold>();
             GtEsdos1s = new HashSet<GtEsdos1>();
+            GtEsdoscs = new HashSet<GtEsdosc>();
         }
 
         public int DoctorId { get; set; }
@@ -35,5 +36,6 @@ namespace eSya.ServiceProvider.DL.Entities
 
         public virtual ICollection<GtEsdold> GtEsdolds { get; set; }
         public virtual ICollection<GtEsdos1> GtEsdos1s { get; set; }
+        public virtual ICollection<GtEsdosc> GtEsdoscs { get; set; }
     }
 }

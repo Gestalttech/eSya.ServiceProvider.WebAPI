@@ -37,6 +37,7 @@ namespace eSya.ServiceProvider.DL.Entities
         public virtual DbSet<GtEsdoim> GtEsdoims { get; set; } = null!;
         public virtual DbSet<GtEsdold> GtEsdolds { get; set; } = null!;
         public virtual DbSet<GtEsdos1> GtEsdos1s { get; set; } = null!;
+        public virtual DbSet<GtEsdosc> GtEsdoscs { get; set; } = null!;
         public virtual DbSet<GtEsdosd> GtEsdosds { get; set; } = null!;
         public virtual DbSet<GtEsdosp> GtEsdosps { get; set; } = null!;
         public virtual DbSet<GtEsopcl> GtEsopcls { get; set; } = null!;
@@ -677,6 +678,48 @@ namespace eSya.ServiceProvider.DL.Entities
                     .HasForeignKey(d => d.SpecialtyId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_GT_ESDOS1_GT_ESSPCD");
+            });
+
+            modelBuilder.Entity<GtEsdosc>(entity =>
+            {
+                entity.HasKey(e => new { e.BusinessKey, e.ConsultationId, e.ClinicId, e.SpecialtyId, e.DoctorId, e.ScheduleChangeDate });
+
+                entity.ToTable("GT_ESDOSC");
+
+                entity.Property(e => e.ConsultationId).HasColumnName("ConsultationID");
+
+                entity.Property(e => e.ClinicId).HasColumnName("ClinicID");
+
+                entity.Property(e => e.SpecialtyId).HasColumnName("SpecialtyID");
+
+                entity.Property(e => e.DoctorId).HasColumnName("DoctorID");
+
+                entity.Property(e => e.ScheduleChangeDate).HasColumnType("datetime");
+
+                entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+
+                entity.Property(e => e.CreatedTerminal).HasMaxLength(50);
+
+                entity.Property(e => e.FormId)
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .HasColumnName("FormID");
+
+                entity.Property(e => e.ModifiedOn).HasColumnType("datetime");
+
+                entity.Property(e => e.ModifiedTerminal).HasMaxLength(50);
+
+                entity.HasOne(d => d.Doctor)
+                    .WithMany(p => p.GtEsdoscs)
+                    .HasForeignKey(d => d.DoctorId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_GT_ESDOSC_GT_ESDOCD");
+
+                entity.HasOne(d => d.Specialty)
+                    .WithMany(p => p.GtEsdoscs)
+                    .HasForeignKey(d => d.SpecialtyId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_GT_ESDOSC_GT_ESSPCD");
             });
 
             modelBuilder.Entity<GtEsdosd>(entity =>

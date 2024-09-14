@@ -14,6 +14,10 @@
   "W0141": "Specialty does not Exist",
   "W0142": "New effective date can't be less than the current effective date",
   "W0143": "Doctor Schedule doesn't Exists to update",
+  "W0144": "Doctor Schedule Change already Exists for the Date",
+  "W0145": "Doctor Schedule Change doesn't Exists to update",
+  "W0146": "Time Slot for selected Date and Time is already Exist",
+  "W0147": "Doctor Schedule change doesn't Exists to update",
 
   "S0001": "Saved Sucessfully",
   "S0002": "Updated Sucessfully",
@@ -22,6 +26,8 @@
   "S0005": "Deleted Sucessfully",
   "S0006": "Doctor Image & Signature Uploaded Successfully",
   "S0007": "Doctor Schedule Updated Successfully",
-  "S0008": "Doctor Schedule Created Successfully"
+  "S0008": "Doctor Schedule Created Successfully",
+  "S0009": "Doctor Schedule Change Created Successfully",
+  "S0010": "Doctor Schedule Change Updated Successfully"
 
 }
