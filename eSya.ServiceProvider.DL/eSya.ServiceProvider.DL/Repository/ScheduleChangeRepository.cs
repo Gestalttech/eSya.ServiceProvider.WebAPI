@@ -19,6 +19,36 @@ namespace eSya.ServiceProvider.DL.Repository
             _localizer = localizer;
         }
         #region Doctor Schedule Change
+        public async Task<List<DO_DoctorScheduler>> GetExistingDoctorScheduledList(int Businesskey, int DoctorID, int SpecialtyID, int ClinicID, int ConsultationID, DateTime ScheduleChangeDate)
+        {
+            using (var db = new eSyaEnterprise())
+            {
+                try
+                {
+                    var dc_ms = await db.GtEsdos1s
+
+                        .Where(w => w.BusinessKey == Businesskey && w.DoctorId == DoctorID && w.SpecialtyId == SpecialtyID
+                            && w.ClinicId == ClinicID && w.ConsultationId == ConsultationID && w.DayOfWeek == ScheduleChangeDate.DayOfWeek.ToString())
+                        .AsNoTracking()
+                        .Select(x => new DO_DoctorScheduler
+                        {
+                            DayOfWeek = x.DayOfWeek,
+                            ScheduleFromTime = x.ScheduleFromTime,
+                            ScheduleToTime = x.ScheduleToTime,
+                            PatientCountPerHour = x.PatientCountPerHour,
+                            TimeSlotInMins = x.TimeSlotInMins,
+                            ActiveStatus = x.ActiveStatus
+
+                        }).ToListAsync();
+
+                    return dc_ms;
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
         public async Task<List<DO_DoctorScheduler>> GetDoctorScheduleChangeList(int Businesskey, int DoctorID, int SpecialtyID, int ClinicID, int ConsultationID, DateTime ScheduleChangeDate)
         {
             using (var db = new eSyaEnterprise())

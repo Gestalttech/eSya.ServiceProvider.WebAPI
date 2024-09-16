@@ -18,6 +18,16 @@ namespace eSya.ServiceProvider.WebAPI.Controllers
         }
         #region Doctor Schedule change
         /// <summary>
+        ///Get Existing Scheduled  Grid 
+        /// UI Reffered - Doctor Schedule change,
+        /// </summary>
+        [HttpGet]
+        public async Task<IActionResult> GetExistingDoctorScheduledList(int Businesskey, int DoctorID, int SpecialtyID, int ClinicID, int ConsultationID, DateTime ScheduleChangeDate)
+        {
+            var ds = await _scheduleChangeRepository.GetExistingDoctorScheduledList(Businesskey, DoctorID, SpecialtyID, ClinicID, ConsultationID, ScheduleChangeDate);
+            return Ok(ds);
+        }
+        /// <summary>
         ///Get Schedule change Grid 
         /// UI Reffered - Doctor Schedule change,
         /// </summary>
