@@ -8,6 +8,7 @@ namespace eSya.ServiceProvider.DL.Entities
         public GtEsspcd()
         {
             GtEsdos1s = new HashSet<GtEsdos1>();
+            GtEsdos2s = new HashSet<GtEsdos2>();
             GtEsdoscs = new HashSet<GtEsdosc>();
         }
 
@@ -28,6 +29,7 @@ namespace eSya.ServiceProvider.DL.Entities
         public string? ModifiedTerminal { get; set; }
 
         public virtual ICollection<GtEsdos1> GtEsdos1s { get; set; }
+        public virtual ICollection<GtEsdos2> GtEsdos2s { get; set; }
         public virtual ICollection<GtEsdosc> GtEsdoscs { get; set; }
     }
 }

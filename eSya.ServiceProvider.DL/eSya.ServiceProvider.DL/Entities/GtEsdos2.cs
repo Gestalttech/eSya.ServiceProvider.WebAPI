@@ -10,11 +10,12 @@ namespace eSya.ServiceProvider.DL.Entities
         public int ClinicId { get; set; }
         public int SpecialtyId { get; set; }
         public int DoctorId { get; set; }
-        public string DayOfWeek { get; set; } = null!;
+        public DateTime ScheduleDate { get; set; }
         public int SerialNo { get; set; }
         public TimeSpan ScheduleFromTime { get; set; }
         public TimeSpan ScheduleToTime { get; set; }
-        public string Xlreference { get; set; } = null!;
+        public int NoOfPatients { get; set; }
+        public string XlsheetReference { get; set; } = null!;
         public bool ActiveStatus { get; set; }
         public string FormId { get; set; } = null!;
         public int CreatedBy { get; set; }

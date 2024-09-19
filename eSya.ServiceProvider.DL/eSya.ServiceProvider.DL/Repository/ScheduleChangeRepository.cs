@@ -219,7 +219,7 @@ namespace eSya.ServiceProvider.DL.Repository
                 {
                     try
                     {
-                        GtEsdosc doctorSchedule = db.GtEsdoscs.Where(x => x.BusinessKey == obj.BusinessKey && x.ClinicId == obj.ClinicID && x.SpecialtyId == obj.SpecialtyID && x.DoctorId == obj.DoctorId && x.ConsultationId == obj.ConsultationID && x.ScheduleChangeDate.Date == obj.ScheduleChangeDate.Date).FirstOrDefault();
+                        GtEsdosc doctorSchedule = db.GtEsdoscs.Where(x => x.BusinessKey == obj.BusinessKey && x.ClinicId == obj.ClinicID && x.SpecialtyId == obj.SpecialtyID && x.DoctorId == obj.DoctorId && x.ConsultationId == obj.ConsultationID && x.ScheduleChangeDate.Date == obj.ScheduleChangeDate.Date &&x.SerialNo==obj.SerialNo).FirstOrDefault();
                         if (doctorSchedule == null)
                         {
                             return new DO_ReturnParameter() { Status = false, StatusCode = "W0147", Message = string.Format(_localizer[name: "W0147"]) };

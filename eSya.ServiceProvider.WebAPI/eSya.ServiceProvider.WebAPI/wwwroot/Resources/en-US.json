@@ -18,6 +18,9 @@
   "W0145": "Doctor Schedule Change doesn't Exists to update",
   "W0146": "Time Slot for selected Date and Time is already Exist",
   "W0147": "Doctor Schedule change doesn't Exists to update",
+  "W0148": "Time slot for selected date is already exist",
+  "W0149": "Time Slot for selected Day is already Exist",
+  "W0150": "Doctor day Schedule doesn't Exists to update",
 
   "S0001": "Saved Sucessfully",
   "S0002": "Updated Sucessfully",
@@ -28,6 +31,12 @@
   "S0007": "Doctor Schedule Updated Successfully",
   "S0008": "Doctor Schedule Created Successfully",
   "S0009": "Doctor Schedule Change Created Successfully",
-  "S0010": "Doctor Schedule Change Updated Successfully"
+  "S0010": "Doctor Schedule Change Updated Successfully",
+  "S0011": "Doctor day Schedule Created Successfully",
+  "S0012": "Doctor day Schedule Updated Successfully",
+  "S0013": "Doctor day Schedule Activated Successfully",
+  "S0014": "Doctor day Schedule De Activated Successfully",
+  "S0015": "Excel Imported Successfully for Doctor Schedule"
+
 
 }

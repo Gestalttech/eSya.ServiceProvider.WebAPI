@@ -193,7 +193,11 @@ namespace eSya.ServiceProvider.DL.Repository
                                 isexists = true;
                             }
                         }
-                       
+                        if (isexists == true)
+                        {
+                            return new DO_ReturnParameter() { Status = false, StatusCode = "W0149", Message = string.Format(_localizer[name: "W0149"]) };
+
+                        }
                         int serialNumber = db.GtEsdos1s.Where(x => x.BusinessKey == obj.BusinessKey && x.ClinicId == obj.ClinicID && x.SpecialtyId == obj.SpecialtyID && x.DoctorId == obj.DoctorId && x.ConsultationId == obj.ConsultationID).Select(x => x.SerialNo).DefaultIfEmpty().Max() + 1;
 
                         var dschedule = new GtEsdos1
@@ -273,7 +277,11 @@ namespace eSya.ServiceProvider.DL.Repository
                                     isexists = true;
                                 }
                             }
-                           
+                            if (isexists == true)
+                            {
+                                return new DO_ReturnParameter() { Status = false, StatusCode = "W0149", Message = string.Format(_localizer[name: "W0149"]) };
+
+                            }
                             doctorSchedule.DayOfWeek = obj.DayOfWeek;
                             doctorSchedule.ScheduleFromTime = obj.ScheduleFromTime;
                             doctorSchedule.ScheduleToTime = obj.ScheduleToTime;
