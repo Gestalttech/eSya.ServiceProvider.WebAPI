@@ -171,7 +171,7 @@ namespace eSya.ServiceProvider.DL.Repository
                             bool isexists = false;
                             var ds_list = db.GtEsdos2s.Where(x => x.BusinessKey == obj.BusinessKey && x.ConsultationId == obj.ConsultationId
                                       && x.ClinicId == obj.ClinicId && x.SpecialtyId == obj.SpecialtyId && x.DoctorId == obj.DoctorId
-                                      && x.ScheduleDate == obj.ScheduleDate && x.ActiveStatus && x.SerialNo != obj.SerialNo).ToList();
+                                      && x.ScheduleDate.Date == obj.ScheduleDate.Date && x.ActiveStatus && x.SerialNo != obj.SerialNo).ToList();
 
                             foreach (var item in ds_list)
                             {
@@ -326,7 +326,7 @@ namespace eSya.ServiceProvider.DL.Repository
                             }
                             if (isexists == true)
                             {
-                                return new DO_ReturnParameter() { Status = false, Message = "Time slot for Date:" + time.ScheduleDate.Date + "is already exists for Doctor:" + time.DoctorName };
+                                return new DO_ReturnParameter() { Status = false, Message = "Time slot for Date and From Time:" + time.ScheduleDate.Date.Add(time.ScheduleFromTime) +" "+ "Date and To Time:" + time.ScheduleDate.Date.Add(time.ScheduleToTime)+ "is already exists for Doctor:"+" " + time.DoctorName };
                             }
 
                             var scheduled = await db.GtEsdos2s.Where(x => x.BusinessKey == time.BusinessKey && x.ConsultationId == time.ConsultationId
