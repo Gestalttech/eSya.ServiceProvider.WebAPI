@@ -18,8 +18,202 @@ namespace eSya.ServiceProvider.DL.Repository
         {
             _localizer = localizer;
         }
-        #region Doctor Day Schedule
-        public async Task<List<DO_DoctorDaySchedule>> GetDoctordaySchedulebySearchCriteria(int Businesskey, int DoctorID, int SpecialtyID, int ClinicID, int ConsultationID, DateTime ScheduleFromDate, DateTime ScheduleToDate)
+        #region Doctor Day Schedule upload
+       
+
+        public async Task<DO_ReturnParameter> ImportedDoctorScheduleList(List<DO_DoctorDaySchedule> obj)
+        {
+            using (var db = new eSyaEnterprise())
+            {
+
+                using (var dbContext = db.Database.BeginTransaction())
+                {
+                    try
+                    {
+
+                        foreach (var time in obj)
+                        {
+                            if (time.ScheduleFromTime >= time.ScheduleToTime)
+                            {
+                                return new DO_ReturnParameter() { Status = false, Message = time.ScheduleFromTime + "From Time can't be more than or equal to" + time.ScheduleToTime + "To Time." };
+                            }
+
+                            var doctor = db.GtEsdocds.Where(x => x.DoctorName.ToUpper().Trim().Replace(" ", "") == time.DoctorName.ToUpper().Trim().Replace(" ", "")).FirstOrDefault();
+                            if (doctor == null)
+                            {
+                                return new DO_ReturnParameter() { Status = false, Message = "Doctor:" + time.DoctorName + "is not avalabe" };
+                            }
+                            else
+                            {
+                                time.DoctorId = doctor.DoctorId;
+                            }
+                            var clinic = db.GtEcapcds.Where(x => x.CodeDesc.ToUpper().Trim().Replace(" ", "") == time.ClinicDesc.ToUpper().Trim().Replace(" ", "").Trim()).FirstOrDefault();
+                            if (clinic == null)
+                            {
+                                return new DO_ReturnParameter() { Status = false, Message = "Doctor:" + time.ClinicDesc + "is not avalabe" };
+                            }
+                            else
+                            {
+                                time.ClinicId = clinic.ApplicationCode;
+                            }
+                            var consultation = db.GtEcapcds.Where(x => x.CodeDesc.ToUpper().Trim().Replace(" ", "") == time.ConsultationDesc.ToUpper().Trim().Replace(" ", "")).FirstOrDefault();
+                            if (consultation == null)
+                            {
+                                return new DO_ReturnParameter() { Status = false, Message = "Doctor:" + time.ConsultationDesc + "is not avalabe" };
+                            }
+                            else
+                            {
+                                time.ConsultationId = consultation.ApplicationCode;
+                            }
+                            var specialty = db.GtEsspcds.Where(x => x.SpecialtyDesc.ToUpper().Trim().Replace(" ", "") == time.SpecialtyDesc.ToUpper().Trim().Replace(" ", "")).FirstOrDefault();
+                            if (specialty == null)
+                            {
+                                return new DO_ReturnParameter() { Status = false, Message = "Doctor:" + time.SpecialtyDesc + "is not avalabe" };
+                            }
+                            else
+                            {
+                                time.SpecialtyId = specialty.SpecialtyId;
+                            }
+
+
+                            var ds_list = db.GtEsdos2s.Where(x => x.BusinessKey == time.BusinessKey && x.ConsultationId == time.ConsultationId
+                                      && x.ClinicId == time.ClinicId && x.SpecialtyId == time.SpecialtyId && x.DoctorId == time.DoctorId
+                                      && x.ScheduleDate.Date == time.ScheduleDate.Date && x.ActiveStatus).ToList();
+
+                            bool isexists = false;
+                            foreach (var _isexists in ds_list)
+                            {
+                                if ((time.ScheduleFromTime >= _isexists.ScheduleFromTime && time.ScheduleFromTime < _isexists.ScheduleToTime)
+                                       || (time.ScheduleToTime > _isexists.ScheduleFromTime && time.ScheduleToTime <= _isexists.ScheduleToTime))
+                                {
+                                    isexists = true;
+                                }
+                            }
+                            if (isexists == true)
+                            {
+                                return new DO_ReturnParameter() { Status = false, Message = "Time slot for Date and From Time:" + time.ScheduleDate.Date.Add(time.ScheduleFromTime) +" "+ "Date and To Time:" + time.ScheduleDate.Date.Add(time.ScheduleToTime)+ "is already exists for Doctor:"+" " + time.DoctorName };
+                            }
+
+                            var scheduled = await db.GtEsdos2s.Where(x => x.BusinessKey == time.BusinessKey && x.ConsultationId == time.ConsultationId
+                                     && x.ClinicId == time.ClinicId && x.SpecialtyId == time.SpecialtyId && x.DoctorId == time.DoctorId
+                                     && x.ScheduleDate.Date == time.ScheduleDate.Date && x.SerialNo == time.SerialNo).FirstOrDefaultAsync();
+
+                            if (scheduled == null)
+                            {
+                                //int serialNumber = db.GtEsdos2s.Where(x => x.BusinessKey == time.BusinessKey && x.ConsultationId == time.ConsultationId && x.ClinicId == time.ClinicId && x.SpecialtyId == time.SpecialtyId && x.DoctorId == time.DoctorId && x.ScheduleDate.Date == time.ScheduleDate.Date).Select(x => x.SerialNo).DefaultIfEmpty().Max() + 1;
+                                int serialNumber = db.GtEsdos2s.Where(x => x.BusinessKey == time.BusinessKey && x.ConsultationId == time.ConsultationId && x.ClinicId == time.ClinicId && x.SpecialtyId == time.SpecialtyId && x.DoctorId == time.DoctorId).Select(x => x.SerialNo).DefaultIfEmpty().Max() + 1;
+                                var do_sc = new GtEsdos2
+                                {
+                                    BusinessKey = time.BusinessKey,
+                                    ConsultationId = time.ConsultationId,
+                                    ClinicId = time.ClinicId,
+                                    SpecialtyId = time.SpecialtyId,
+                                    DoctorId = time.DoctorId,
+                                    ScheduleDate = time.ScheduleDate,
+                                    SerialNo = serialNumber,
+                                    ScheduleFromTime = time.ScheduleFromTime,
+                                    ScheduleToTime = time.ScheduleToTime,
+                                    NoOfPatients = time.NoOfPatients,
+                                    XlsheetReference = time.XlsheetReference,
+                                    ActiveStatus = time.ActiveStatus,
+                                    FormId = time.FormID,
+                                    CreatedBy = time.UserID,
+                                    CreatedOn = System.DateTime.Now,
+                                    CreatedTerminal = time.TerminalID,
+                                };
+
+                                db.GtEsdos2s.Add(do_sc);
+                                await db.SaveChangesAsync();
+                            }
+                            else
+                            {
+                                scheduled.ScheduleFromTime = time.ScheduleFromTime;
+                                scheduled.ScheduleToTime = time.ScheduleToTime;
+                                scheduled.NoOfPatients = time.NoOfPatients;
+                                scheduled.XlsheetReference = time.XlsheetReference;
+                                scheduled.ActiveStatus = time.ActiveStatus;
+                                scheduled.ModifiedBy = time.UserID;
+                                scheduled.ModifiedOn = System.DateTime.Now;
+                                scheduled.ModifiedTerminal = time.TerminalID;
+                                await db.SaveChangesAsync();
+                            }
+
+                        }
+                        dbContext.Commit();
+                        return new DO_ReturnParameter() { Status = true, StatusCode = "S0015", Message = string.Format(_localizer[name: "S0015"]) };
+
+                    }
+                    catch (DbUpdateException ex)
+                    {
+
+                        dbContext.Rollback();
+                        throw new Exception(CommonMethod.GetValidationMessageFromException(ex));
+                    }
+
+                }
+            }
+
+        }
+        //public async Task<List<DO_DoctorDaySchedule>> GetUploadedDoctordaySchedulebySearchCriteria(int Businesskey, DateTime? ScheduleFromDate, DateTime? ScheduleToDate)
+        //{
+        //    using (var db = new eSyaEnterprise())
+        //    {
+        //        try
+        //        {
+        //            var dc_sc = db.GtEsdos2s
+        //                .Join(db.GtEsspcds,
+        //                o => new { o.SpecialtyId },
+        //                s => new { s.SpecialtyId },
+        //                (o, s) => new { o, s })
+        //                .Join(db.GtEsdocds,
+        //                os => new { os.o.DoctorId },
+        //                d => new { d.DoctorId },
+        //                (os, d) => new { os, d })
+
+        //                .Join(db.GtEcapcds.Where(w => w.CodeType == CodeTypeValue.Clinic),
+        //                    l => new { l.os.o.ClinicId },
+        //                    c => new { ClinicId = c.ApplicationCode },
+        //                    (l, c) => new { l, c })
+        //                .Join(db.GtEcapcds.Where(w => w.CodeType == CodeTypeValue.ConsultationType),
+        //                    lc => new { lc.l.os.o.ConsultationId },
+        //                    ol => new { ConsultationId = ol.ApplicationCode },
+        //                    (lc, ol) => new { lc, ol })
+        //                .Where(w => w.lc.l.os.o.ScheduleDate.Date >= ScheduleFromDate.Date
+        //                 && w.lc.l.os.o.ScheduleDate.Date <= ScheduleToDate.Date)
+
+        //                .AsNoTracking()
+
+        //                .Select(x => new DO_DoctorDaySchedule
+        //                {
+
+        //                    BusinessKey = x.lc.l.os.o.BusinessKey,
+        //                    ConsultationId = x.lc.l.os.o.ConsultationId,
+        //                    ConsultationDesc = x.ol.CodeDesc,
+        //                    ClinicId = x.lc.l.os.o.ClinicId,
+        //                    ClinicDesc = x.lc.c.CodeDesc,
+        //                    SpecialtyId = x.lc.l.os.o.SpecialtyId,
+        //                    SpecialtyDesc = x.lc.l.os.s.SpecialtyDesc,
+        //                    DoctorId = x.lc.l.os.o.DoctorId,
+        //                    DoctorName = x.lc.l.d.DoctorName,
+        //                    ScheduleDate = x.lc.l.os.o.ScheduleDate,
+        //                    SerialNo = x.lc.l.os.o.SerialNo,
+        //                    ScheduleFromTime = x.lc.l.os.o.ScheduleFromTime,
+        //                    ScheduleToTime = x.lc.l.os.o.ScheduleToTime,
+        //                    NoOfPatients = x.lc.l.os.o.NoOfPatients,
+        //                    XlsheetReference = x.lc.l.os.o.XlsheetReference,
+        //                    ActiveStatus = x.lc.l.os.o.ActiveStatus
+        //                })
+        //                .ToListAsync();
+
+        //            return await dc_sc;
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            throw ex;
+        //        }
+        //    }
+        //}
+        public async Task<List<DO_DoctorDaySchedule>> GetUploadedDoctordaySchedulebySearchCriteria(int Businesskey, DateTime? ScheduleFromDate, DateTime? ScheduleToDate)
         {
             using (var db = new eSyaEnterprise())
             {
@@ -27,14 +221,13 @@ namespace eSya.ServiceProvider.DL.Repository
                 {
                     var dc_sc = db.GtEsdos2s
                         .Join(db.GtEsspcds,
-                        o => new { o.SpecialtyId },
-                        s => new { s.SpecialtyId },
-                        (o, s) => new { o, s })
+                            o => new { o.SpecialtyId },
+                            s => new { s.SpecialtyId },
+                            (o, s) => new { o, s })
                         .Join(db.GtEsdocds,
-                        os => new { os.o.DoctorId },
-                        d => new { d.DoctorId },
-                        (os, d) => new { os, d })
-
+                            os => new { os.o.DoctorId },
+                            d => new { d.DoctorId },
+                            (os, d) => new { os, d })
                         .Join(db.GtEcapcds.Where(w => w.CodeType == CodeTypeValue.Clinic),
                             l => new { l.os.o.ClinicId },
                             c => new { ClinicId = c.ApplicationCode },
@@ -43,15 +236,14 @@ namespace eSya.ServiceProvider.DL.Repository
                             lc => new { lc.l.os.o.ConsultationId },
                             ol => new { ConsultationId = ol.ApplicationCode },
                             (lc, ol) => new { lc, ol })
-                        .Where(w => w.lc.l.os.o.BusinessKey == Businesskey && w.lc.l.os.o.ClinicId == ClinicID && w.lc.l.os.o.ConsultationId == ConsultationID
-                         && w.lc.l.os.o.SpecialtyId == SpecialtyID && w.lc.l.os.o.DoctorId == DoctorID && w.lc.l.os.o.ScheduleDate.Date >= ScheduleFromDate.Date
-                         && w.lc.l.os.o.ScheduleDate.Date <= ScheduleToDate.Date)
+                        // Date filter only when ScheduleFromDate or ScheduleToDate is not null
+                        .Where(w => w.lc.l.os.o.BusinessKey==Businesskey
+                                && (!ScheduleFromDate.HasValue || w.lc.l.os.o.ScheduleDate.Date >= ScheduleFromDate.Value.Date)
+                                && (!ScheduleToDate.HasValue || w.lc.l.os.o.ScheduleDate.Date <= ScheduleToDate.Value.Date))
 
                         .AsNoTracking()
-
                         .Select(x => new DO_DoctorDaySchedule
                         {
-
                             BusinessKey = x.lc.l.os.o.BusinessKey,
                             ConsultationId = x.lc.l.os.o.ConsultationId,
                             ConsultationDesc = x.ol.CodeDesc,
@@ -79,7 +271,157 @@ namespace eSya.ServiceProvider.DL.Repository
                 }
             }
         }
+        #endregion
 
+        #region Schedule Export
+        //public async Task<List<DO_DoctorDaySchedule>> GetDoctordaySchedulebySearchCriteria(int Businesskey, int DoctorID, int SpecialtyID, int ClinicID, int ConsultationID, DateTime ScheduleFromDate, DateTime ScheduleToDate)
+        //{
+        //    using (var db = new eSyaEnterprise())
+        //    {
+        //        try
+        //        {
+        //            var dc_sc = db.GtEsdos2s
+        //                .Join(db.GtEsspcds,
+        //                o => new { o.SpecialtyId },
+        //                s => new { s.SpecialtyId },
+        //                (o, s) => new { o, s })
+        //                .Join(db.GtEsdocds,
+        //                os => new { os.o.DoctorId },
+        //                d => new { d.DoctorId },
+        //                (os, d) => new { os, d })
+
+        //                .Join(db.GtEcapcds.Where(w => w.CodeType == CodeTypeValue.Clinic),
+        //                    l => new { l.os.o.ClinicId },
+        //                    c => new { ClinicId = c.ApplicationCode },
+        //                    (l, c) => new { l, c })
+        //                .Join(db.GtEcapcds.Where(w => w.CodeType == CodeTypeValue.ConsultationType),
+        //                    lc => new { lc.l.os.o.ConsultationId },
+        //                    ol => new { ConsultationId = ol.ApplicationCode },
+        //                    (lc, ol) => new { lc, ol })
+        //                .Where(w => w.lc.l.os.o.BusinessKey == Businesskey && w.lc.l.os.o.ClinicId == ClinicID && w.lc.l.os.o.ConsultationId == ConsultationID
+        //                 && w.lc.l.os.o.SpecialtyId == SpecialtyID && w.lc.l.os.o.DoctorId == DoctorID && w.lc.l.os.o.ScheduleDate.Date >= ScheduleFromDate.Date
+        //                 && w.lc.l.os.o.ScheduleDate.Date <= ScheduleToDate.Date)
+
+        //                .AsNoTracking()
+
+        //                .Select(x => new DO_DoctorDaySchedule
+        //                {
+
+        //                    BusinessKey = x.lc.l.os.o.BusinessKey,
+        //                    ConsultationId = x.lc.l.os.o.ConsultationId,
+        //                    ConsultationDesc = x.ol.CodeDesc,
+        //                    ClinicId = x.lc.l.os.o.ClinicId,
+        //                    ClinicDesc = x.lc.c.CodeDesc,
+        //                    SpecialtyId = x.lc.l.os.o.SpecialtyId,
+        //                    SpecialtyDesc = x.lc.l.os.s.SpecialtyDesc,
+        //                    DoctorId = x.lc.l.os.o.DoctorId,
+        //                    DoctorName = x.lc.l.d.DoctorName,
+        //                    ScheduleDate = x.lc.l.os.o.ScheduleDate,
+        //                    SerialNo = x.lc.l.os.o.SerialNo,
+        //                    ScheduleFromTime = x.lc.l.os.o.ScheduleFromTime,
+        //                    ScheduleToTime = x.lc.l.os.o.ScheduleToTime,
+        //                    NoOfPatients = x.lc.l.os.o.NoOfPatients,
+        //                    XlsheetReference = x.lc.l.os.o.XlsheetReference,
+        //                    ActiveStatus = x.lc.l.os.o.ActiveStatus
+        //                })
+        //                .ToListAsync();
+
+        //            return await dc_sc;
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            throw ex;
+        //        }
+        //    }
+        //}
+        public async Task<List<DO_DoctorDaySchedule>> GetDoctordaySchedulebySearchCriteria(int Businesskey, int DoctorID, int SpecialtyID, int ClinicID, int ConsultationID, DateTime? ScheduleFromDate, DateTime? ScheduleToDate)
+        {
+            using (var db = new eSyaEnterprise())
+            {
+                try
+                {
+                    var query = db.GtEsdos2s
+                        .Join(db.GtEsspcds,
+                            o => new { o.SpecialtyId },
+                            s => new { s.SpecialtyId },
+                            (o, s) => new { o, s })
+                        .Join(db.GtEsdocds,
+                            os => new { os.o.DoctorId },
+                            d => new { d.DoctorId },
+                            (os, d) => new { os, d })
+                        .Join(db.GtEcapcds.Where(w => w.CodeType == CodeTypeValue.Clinic),
+                            l => new { l.os.o.ClinicId },
+                            c => new { ClinicId = c.ApplicationCode },
+                            (l, c) => new { l, c })
+                        .Join(db.GtEcapcds.Where(w => w.CodeType == CodeTypeValue.ConsultationType),
+                            lc => new { lc.l.os.o.ConsultationId },
+                            ol => new { ConsultationId = ol.ApplicationCode },
+                            (lc, ol) => new { lc, ol })
+                        // Always filter by BusinessKey
+                        .Where(w => w.lc.l.os.o.BusinessKey == Businesskey);
+
+                    // Conditionally filter by DoctorID, if provided
+                    if (DoctorID!=0)
+                    {
+                        query = query.Where(w => w.lc.l.os.o.DoctorId == DoctorID);
+                    }
+
+                    // Conditionally filter by SpecialtyID, if provided
+                    if (SpecialtyID!=0)
+                    {
+                        query = query.Where(w => w.lc.l.os.o.SpecialtyId == SpecialtyID);
+                    }
+
+                    // Conditionally filter by ClinicID, if provided
+                    if (ClinicID!=0)
+                    {
+                        query = query.Where(w => w.lc.l.os.o.ClinicId == ClinicID);
+                    }
+
+                    // Conditionally filter by ConsultationID, if provided
+                    if (ConsultationID!=0)
+                    {
+                        query = query.Where(w => w.lc.l.os.o.ConsultationId == ConsultationID);
+                    }
+
+                    // Conditionally filter by ScheduleFromDate and ScheduleToDate
+                    if (ScheduleFromDate.HasValue && ScheduleToDate.HasValue)
+                    {
+                        query = query.Where(w => w.lc.l.os.o.ScheduleDate.Date >= ScheduleFromDate.Value.Date
+                                                  && w.lc.l.os.o.ScheduleDate.Date <= ScheduleToDate.Value.Date);
+                    }
+
+                    var dc_sc = await query
+                        .AsNoTracking()
+                        .Select(x => new DO_DoctorDaySchedule
+                        {
+                            BusinessKey = x.lc.l.os.o.BusinessKey,
+                            ConsultationId = x.lc.l.os.o.ConsultationId,
+                            ConsultationDesc = x.ol.CodeDesc,
+                            ClinicId = x.lc.l.os.o.ClinicId,
+                            ClinicDesc = x.lc.c.CodeDesc,
+                            SpecialtyId = x.lc.l.os.o.SpecialtyId,
+                            SpecialtyDesc = x.lc.l.os.s.SpecialtyDesc,
+                            DoctorId = x.lc.l.os.o.DoctorId,
+                            DoctorName = x.lc.l.d.DoctorName,
+                            ScheduleDate = x.lc.l.os.o.ScheduleDate,
+                            SerialNo = x.lc.l.os.o.SerialNo,
+                            ScheduleFromTime = x.lc.l.os.o.ScheduleFromTime,
+                            ScheduleToTime = x.lc.l.os.o.ScheduleToTime,
+                            NoOfPatients = x.lc.l.os.o.NoOfPatients,
+                            XlsheetReference = x.lc.l.os.o.XlsheetReference,
+                            ActiveStatus = x.lc.l.os.o.ActiveStatus
+                        })
+                        .ToListAsync();
+
+                    return dc_sc;
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
         public async Task<DO_ReturnParameter> InsertIntoDoctordaySchedule(DO_DoctorDaySchedule obj)
         {
             using (var db = new eSyaEnterprise())
@@ -106,7 +448,7 @@ namespace eSya.ServiceProvider.DL.Repository
                             return new DO_ReturnParameter() { Status = false, StatusCode = "W0148", Message = string.Format(_localizer[name: "W0148"]) };
 
                         }
-                       
+
                         else
                         {
                             //int serialNumber = db.GtEsdos2s.Where(x => x.BusinessKey == obj.BusinessKey && x.ConsultationId == obj.ConsultationId && x.ClinicId == obj.ClinicId && x.SpecialtyId == obj.SpecialtyId && x.DoctorId == obj.DoctorId && x.ScheduleDate.Date == obj.ScheduleDate.Date).Select(x => x.SerialNo).DefaultIfEmpty().Max() + 1;
@@ -254,140 +596,6 @@ namespace eSya.ServiceProvider.DL.Repository
                     }
                 }
             }
-        }
-
-        public async Task<DO_ReturnParameter> ImportedDoctorScheduleList(List<DO_DoctorDaySchedule> obj)
-        {
-            using (var db = new eSyaEnterprise())
-            {
-
-                using (var dbContext = db.Database.BeginTransaction())
-                {
-                    try
-                    {
-
-                        foreach (var time in obj)
-                        {
-                            if (time.ScheduleFromTime >= time.ScheduleToTime)
-                            {
-                                return new DO_ReturnParameter() { Status = false, Message = time.ScheduleFromTime + "From Time can't be more than or equal to" + time.ScheduleToTime + "To Time." };
-                            }
-
-                            var doctor = db.GtEsdocds.Where(x => x.DoctorName.ToUpper().Trim().Replace(" ", "") == time.DoctorName.ToUpper().Trim().Replace(" ", "")).FirstOrDefault();
-                            if (doctor == null)
-                            {
-                                return new DO_ReturnParameter() { Status = false, Message = "Doctor:" + time.DoctorName + "is not avalabe" };
-                            }
-                            else
-                            {
-                                time.DoctorId = doctor.DoctorId;
-                            }
-                            var clinic = db.GtEcapcds.Where(x => x.CodeDesc.ToUpper().Trim().Replace(" ", "") == time.ClinicDesc.ToUpper().Trim().Replace(" ", "").Trim()).FirstOrDefault();
-                            if (clinic == null)
-                            {
-                                return new DO_ReturnParameter() { Status = false, Message = "Doctor:" + time.ClinicDesc + "is not avalabe" };
-                            }
-                            else
-                            {
-                                time.ClinicId = clinic.ApplicationCode;
-                            }
-                            var consultation = db.GtEcapcds.Where(x => x.CodeDesc.ToUpper().Trim().Replace(" ", "") == time.ConsultationDesc.ToUpper().Trim().Replace(" ", "")).FirstOrDefault();
-                            if (consultation == null)
-                            {
-                                return new DO_ReturnParameter() { Status = false, Message = "Doctor:" + time.ConsultationDesc + "is not avalabe" };
-                            }
-                            else
-                            {
-                                time.ConsultationId = consultation.ApplicationCode;
-                            }
-                            var specialty = db.GtEsspcds.Where(x => x.SpecialtyDesc.ToUpper().Trim().Replace(" ", "") == time.SpecialtyDesc.ToUpper().Trim().Replace(" ", "")).FirstOrDefault();
-                            if (specialty == null)
-                            {
-                                return new DO_ReturnParameter() { Status = false, Message = "Doctor:" + time.SpecialtyDesc + "is not avalabe" };
-                            }
-                            else
-                            {
-                                time.SpecialtyId = specialty.SpecialtyId;
-                            }
-
-
-                            var ds_list = db.GtEsdos2s.Where(x => x.BusinessKey == time.BusinessKey && x.ConsultationId == time.ConsultationId
-                                      && x.ClinicId == time.ClinicId && x.SpecialtyId == time.SpecialtyId && x.DoctorId == time.DoctorId
-                                      && x.ScheduleDate.Date == time.ScheduleDate.Date && x.ActiveStatus).ToList();
-
-                            bool isexists = false;
-                            foreach (var _isexists in ds_list)
-                            {
-                                if ((time.ScheduleFromTime >= _isexists.ScheduleFromTime && time.ScheduleFromTime < _isexists.ScheduleToTime)
-                                       || (time.ScheduleToTime > _isexists.ScheduleFromTime && time.ScheduleToTime <= _isexists.ScheduleToTime))
-                                {
-                                    isexists = true;
-                                }
-                            }
-                            if (isexists == true)
-                            {
-                                return new DO_ReturnParameter() { Status = false, Message = "Time slot for Date and From Time:" + time.ScheduleDate.Date.Add(time.ScheduleFromTime) +" "+ "Date and To Time:" + time.ScheduleDate.Date.Add(time.ScheduleToTime)+ "is already exists for Doctor:"+" " + time.DoctorName };
-                            }
-
-                            var scheduled = await db.GtEsdos2s.Where(x => x.BusinessKey == time.BusinessKey && x.ConsultationId == time.ConsultationId
-                                     && x.ClinicId == time.ClinicId && x.SpecialtyId == time.SpecialtyId && x.DoctorId == time.DoctorId
-                                     && x.ScheduleDate.Date == time.ScheduleDate.Date && x.SerialNo == time.SerialNo).FirstOrDefaultAsync();
-
-                            if (scheduled == null)
-                            {
-                                //int serialNumber = db.GtEsdos2s.Where(x => x.BusinessKey == time.BusinessKey && x.ConsultationId == time.ConsultationId && x.ClinicId == time.ClinicId && x.SpecialtyId == time.SpecialtyId && x.DoctorId == time.DoctorId && x.ScheduleDate.Date == time.ScheduleDate.Date).Select(x => x.SerialNo).DefaultIfEmpty().Max() + 1;
-                                int serialNumber = db.GtEsdos2s.Where(x => x.BusinessKey == time.BusinessKey && x.ConsultationId == time.ConsultationId && x.ClinicId == time.ClinicId && x.SpecialtyId == time.SpecialtyId && x.DoctorId == time.DoctorId).Select(x => x.SerialNo).DefaultIfEmpty().Max() + 1;
-                                var do_sc = new GtEsdos2
-                                {
-                                    BusinessKey = time.BusinessKey,
-                                    ConsultationId = time.ConsultationId,
-                                    ClinicId = time.ClinicId,
-                                    SpecialtyId = time.SpecialtyId,
-                                    DoctorId = time.DoctorId,
-                                    ScheduleDate = time.ScheduleDate,
-                                    SerialNo = serialNumber,
-                                    ScheduleFromTime = time.ScheduleFromTime,
-                                    ScheduleToTime = time.ScheduleToTime,
-                                    NoOfPatients = time.NoOfPatients,
-                                    XlsheetReference = time.XlsheetReference,
-                                    ActiveStatus = time.ActiveStatus,
-                                    FormId = time.FormID,
-                                    CreatedBy = time.UserID,
-                                    CreatedOn = System.DateTime.Now,
-                                    CreatedTerminal = time.TerminalID,
-                                };
-
-                                db.GtEsdos2s.Add(do_sc);
-                                await db.SaveChangesAsync();
-                            }
-                            else
-                            {
-                                scheduled.ScheduleFromTime = time.ScheduleFromTime;
-                                scheduled.ScheduleToTime = time.ScheduleToTime;
-                                scheduled.NoOfPatients = time.NoOfPatients;
-                                scheduled.XlsheetReference = time.XlsheetReference;
-                                scheduled.ActiveStatus = time.ActiveStatus;
-                                scheduled.ModifiedBy = time.UserID;
-                                scheduled.ModifiedOn = System.DateTime.Now;
-                                scheduled.ModifiedTerminal = time.TerminalID;
-                                await db.SaveChangesAsync();
-                            }
-
-                        }
-                        dbContext.Commit();
-                        return new DO_ReturnParameter() { Status = true, StatusCode = "S0015", Message = string.Format(_localizer[name: "S0015"]) };
-
-                    }
-                    catch (DbUpdateException ex)
-                    {
-
-                        dbContext.Rollback();
-                        throw new Exception(CommonMethod.GetValidationMessageFromException(ex));
-                    }
-
-                }
-            }
-
         }
         #endregion
     }

@@ -15,13 +15,24 @@ namespace eSya.ServiceProvider.WebAPI.Controllers
         {
             _doctorDayScheduleRepository = doctorDayScheduleRepository;
         }
-        #region Doctor Day Schedule
+
+        #region Doctor Day Schedule Export
+        ///// <summary>
+        /////Get Doctor Day Schedule Grid 
+        ///// UI Reffered - Doctor Day Schedule,
+        ///// </summary>
+        //[HttpGet]
+        //public async Task<IActionResult> GetDoctordaySchedulebySearchCriteria(int Businesskey, int DoctorID, int SpecialtyID, int ClinicID, int ConsultationID, DateTime ScheduleFromDate, DateTime ScheduleToDate)
+        //{
+        //    var ds = await _doctorDayScheduleRepository.GetDoctordaySchedulebySearchCriteria(Businesskey, DoctorID, SpecialtyID, ClinicID, ConsultationID, ScheduleFromDate, ScheduleToDate);
+        //    return Ok(ds);
+        //}
         /// <summary>
         ///Get Doctor Day Schedule Grid 
         /// UI Reffered - Doctor Day Schedule,
         /// </summary>
         [HttpGet]
-        public async Task<IActionResult> GetDoctordaySchedulebySearchCriteria(int Businesskey, int DoctorID, int SpecialtyID, int ClinicID, int ConsultationID, DateTime ScheduleFromDate, DateTime ScheduleToDate)
+        public async Task<IActionResult> GetDoctordaySchedulebySearchCriteria(int Businesskey, int DoctorID, int SpecialtyID, int ClinicID, int ConsultationID, DateTime? ScheduleFromDate, DateTime? ScheduleToDate)
         {
             var ds = await _doctorDayScheduleRepository.GetDoctordaySchedulebySearchCriteria(Businesskey, DoctorID, SpecialtyID, ClinicID, ConsultationID, ScheduleFromDate, ScheduleToDate);
             return Ok(ds);
@@ -56,6 +67,10 @@ namespace eSya.ServiceProvider.WebAPI.Controllers
             var msg = await _doctorDayScheduleRepository.ActiveOrDeActiveDoctordaySchedule(objdel);
             return Ok(msg);
         }
+
+        #endregion
+
+        #region Schedule Upload
         /// <summary>
         ///Insert Excel uploaded Bulk Day Schedule
         /// UI Reffered - Doctor Day Schedule,
@@ -65,6 +80,16 @@ namespace eSya.ServiceProvider.WebAPI.Controllers
         {
             var msg = await _doctorDayScheduleRepository.ImportedDoctorScheduleList(obj);
             return Ok(msg);
+        }
+        /// <summary>
+        ///Get Doctor Day Schedule Grid 
+        /// UI Reffered - Doctor Day Schedule,
+        /// </summary>
+        [HttpGet]
+        public async Task<IActionResult> GetUploadedDoctordaySchedulebySearchCriteria(int Businesskey, DateTime? ScheduleFromDate, DateTime? ScheduleToDate)
+        {
+            var ds = await _doctorDayScheduleRepository.GetUploadedDoctordaySchedulebySearchCriteria(Businesskey,  ScheduleFromDate, ScheduleToDate);
+            return Ok(ds);
         }
         #endregion
     }
