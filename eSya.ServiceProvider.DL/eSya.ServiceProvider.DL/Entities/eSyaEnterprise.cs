@@ -8,6 +8,7 @@ namespace eSya.ServiceProvider.DL.Entities
     public partial class eSyaEnterprise : DbContext
     {
         public static string _connString = "";
+
         public eSyaEnterprise()
         {
         }
@@ -78,6 +79,8 @@ namespace eSya.ServiceProvider.DL.Entities
                 entity.Property(e => e.ModifiedOn).HasColumnType("datetime");
 
                 entity.Property(e => e.ModifiedTerminal).HasMaxLength(50);
+
+                entity.Property(e => e.Stdcode).HasColumnName("STDCode");
             });
 
             modelBuilder.Entity<GtAddrdt>(entity =>
